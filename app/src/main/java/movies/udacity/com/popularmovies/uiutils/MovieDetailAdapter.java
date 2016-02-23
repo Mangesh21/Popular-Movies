@@ -22,12 +22,13 @@ public class MovieDetailAdapter extends RecyclerView.Adapter<MovieDetailAdapter.
 
     private Context context;
 
+    public void setMovieList(MovieList movieList) {
+        this.movieList = movieList;
+    }
+
     private MovieList movieList;
 
-    int[] imgList;
 
-    String[] nameList = {"One", "Two", "Three", "Four", "Five", "Six",
-            "Seven", "Eight", "Nine", "Ten"};
 
     public MovieDetailAdapter(Context context, MovieList movieList) {
         this.context = context;
@@ -44,13 +45,13 @@ public class MovieDetailAdapter extends RecyclerView.Adapter<MovieDetailAdapter.
     @Override
     public void onBindViewHolder(MovieView holder, int position) {
         //   holder.imageView.setImageResource(imgList[position]);
-        Glide.with(context).load(getCompleteImageURL(movieList.getResults().get(position).getPosterPath())).override(200,200).into(holder.imageView);
+        Glide.with(context).load(getCompleteImageURL(movieList.getResults().get(position).getPosterPath())).into(holder.imageView);
         holder.textView.setText(movieList.getResults().get(position).getTitle());
     }
 
     @Override
     public int getItemCount() {
-        return nameList.length;
+        return movieList.getResults().size();
     }
 
     class MovieView extends RecyclerView.ViewHolder {
@@ -73,4 +74,6 @@ public class MovieDetailAdapter extends RecyclerView.Adapter<MovieDetailAdapter.
         return completeURL;
 
     }
+
+
 }

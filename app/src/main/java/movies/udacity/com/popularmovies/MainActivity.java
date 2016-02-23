@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,31 +25,56 @@ public class MainActivity extends AppCompatActivity {
     BaseClient baseClient = null;
 
     RecyclerView mRecyclerView;
+    MovieDetailAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getMovieList();
 
+
+        if (toolbar != null) {
+            setSupportActionBar(toolbar);
+            getSupportActionBar().setTitle(getString(R.string.app_name));
+        }
         mRecyclerView = (RecyclerView) findViewById(R.id.moivies_grid);
         mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
+        SpacesItemDecoration decoration = new SpacesItemDecoration(10, 2);
+        mRecyclerView.addItemDecoration(decoration);
+        init();
 
 
     }
 
-    private void getMovieList() {
+    private void init() {
         baseClient = new BaseClient();
         baseClient.init();
-        baseClient.getMoviesList(new APICallBack<MovieList>() {
+        getMovieList(Constants.ORDER_POPULARITY);
+    }
+
+    /**
+     * this function will fecth the list of movies
+     *
+     * @param order
+     */
+    private void getMovieList(final String order) {
+
+        baseClient.getMoviesList(order, new APICallBack<MovieList>() {
             @Override
             public void success(MovieList movieList) {
-                MovieDetailAdapter adapter = new MovieDetailAdapter(MainActivity.this, movieList);
-                mRecyclerView.setAdapter(adapter);
-                SpacesItemDecoration decoration = new SpacesItemDecoration(10, 2);
-                mRecyclerView.addItemDecoration(decoration);
+                if (adapter == null) {
+                    adapter = new MovieDetailAdapter(MainActivity.this, movieList);
+                    mRecyclerView.setAdapter(adapter);
+                } else {
+                    adapter.setMovieList(movieList);
+                    adapter.notifyDataSetChanged();
+                }
+                if (TextUtils.equals(order, Constants.ORDER_POPULARITY)) {
+                    Constants.isOrderedByPopularity = true;
+                } else {
+                    Constants.isOrderedByPopularity = false;
+                }
             }
 
             @Override
@@ -73,8 +99,20 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        if (id == R.id.action_sort_by_popularity) {
+            if (Constants.isOrderedByPopularity) {
+                return true;
+            } else {
+                getMovieList(Constants.ORDER_POPULARITY);
+            }
+        }
+
+        if (id == R.id.action_sort_by_ratings) {
+            if (!Constants.isOrderedByPopularity) {
+                return true;
+            } else {
+                getMovieList(Constants.ORDER_RATING);
+            }
         }
 
         return super.onOptionsItemSelected(item);
