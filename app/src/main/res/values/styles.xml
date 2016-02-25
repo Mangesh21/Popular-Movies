@@ -27,4 +27,8 @@
         <item name="android:windowBackground">@color/bg</item>
     </style>
 
+    <style name="Base.MyTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Base.MyTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
 </resources>
