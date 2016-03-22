@@ -3,21 +3,37 @@ package movies.udacity.com.popularmovies.network;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.annotations.SerializedName;
+import com.orm.dsl.Table;
+
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by mangesh on 21/2/16.
  */
-
+@Table
 public class MovieDetail implements Parcelable {
+
+
+    private transient Long id;
 
     private String poster_path;
     private Boolean adult;
     private String overview;
     private String release_date;
     private List<Integer> genreIds = new ArrayList<Integer>();
-    private Integer id;
+
+    public Integer getMovie_ID() {
+        return movie_ID;
+    }
+
+    public void setMovie_ID(Integer movie_ID) {
+        this.movie_ID = movie_ID;
+    }
+
+    @SerializedName("id")
+    private Integer movie_ID;
     private String originalTitle;
     private String originalLanguage;
     private String title;
@@ -97,19 +113,7 @@ public class MovieDetail implements Parcelable {
         this.genreIds = genreIds;
     }
 
-    /**
-     * @return The id
-     */
-    public Integer getId() {
-        return id;
-    }
 
-    /**
-     * @param id The id
-     */
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     /**
      * @return The originalTitle
@@ -231,7 +235,7 @@ public class MovieDetail implements Parcelable {
                 ", overview='" + overview + '\'' +
                 ", releaseDate='" + release_date + '\'' +
                 ", genreIds=" + genreIds +
-                ", id=" + id +
+                ", id=" + movie_ID +
                 ", originalTitle='" + originalTitle + '\'' +
                 ", originalLanguage='" + originalLanguage + '\'' +
                 ", title='" + title + '\'' +
@@ -255,7 +259,7 @@ public class MovieDetail implements Parcelable {
         dest.writeString(this.overview);
         dest.writeString(this.release_date);
         dest.writeList(this.genreIds);
-        dest.writeValue(this.id);
+        dest.writeValue(this.movie_ID);
         dest.writeString(this.originalTitle);
         dest.writeString(this.originalLanguage);
         dest.writeString(this.title);
@@ -276,7 +280,7 @@ public class MovieDetail implements Parcelable {
         this.release_date = in.readString();
         this.genreIds = new ArrayList<Integer>();
         in.readList(this.genreIds, List.class.getClassLoader());
-        this.id = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.movie_ID = (Integer) in.readValue(Integer.class.getClassLoader());
         this.originalTitle = in.readString();
         this.originalLanguage = in.readString();
         this.title = in.readString();

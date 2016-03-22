@@ -1,10 +1,7 @@
 package movies.udacity.com.popularmovies;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.text.SpannableString;
 import android.text.style.RelativeSizeSpan;
 import android.view.View;
@@ -12,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.orm.SugarRecord;
 
 import movies.udacity.com.popularmovies.network.MovieDetail;
 
@@ -22,6 +20,7 @@ public class MovieDetailActivity extends AppCompatActivity {
     TextView txtMovieName;
     TextView txtMovieDetails;
     ImageView imgMovie;
+    ImageView imgLike;
 
     MovieDetail movieDetail = null;
 
@@ -39,6 +38,7 @@ public class MovieDetailActivity extends AppCompatActivity {
         txtMovieDetails = (TextView) findViewById(R.id.txtmoviedetails);
         txtMovieName = (TextView) findViewById(R.id.txtmoviename);
         imgMovie = (ImageView) findViewById(R.id.imgmovie);
+        imgLike = (ImageView) findViewById(R.id.imglike);
 
         txtReleaseDate.setText(movieDetail.getReleaseDate());
         SpannableString ratingsText = SpannableString.valueOf(movieDetail.getVoteAverage() +"/10");
@@ -47,6 +47,15 @@ public class MovieDetailActivity extends AppCompatActivity {
         txtMovieDetails.setText(movieDetail.getOverview());
         txtMovieName.setText(movieDetail.getTitle());
         Glide.with(MovieDetailActivity.this).load(Utils.getCompleteImageURL(movieDetail.getPosterPath())).into(imgMovie);
+
+        imgLike.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SugarRecord.save(movieDetail);
+
+                MovieDetail movieDetail2 = SugarRecord.findById(MovieDetail.class, 1);
+            }
+        });
     }
 
 }

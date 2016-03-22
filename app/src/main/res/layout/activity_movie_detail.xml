@@ -57,7 +57,8 @@
             android:layout_below="@+id/txtreleasedate"
             android:layout_marginTop="41dp"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="@color/primary_text" />
+            android:textColor="@color/primary_text"
+            android:text="7.7/10"/>
 
 
         <TextView
@@ -83,6 +84,16 @@
             android:layout_marginBottom="@dimen/dimen_text_spacing"
             android:text="@string/release_date"
             android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/imglike"
+            android:background="@drawable/like"
+            android:layout_below="@+id/txtratings"
+            android:layout_alignLeft="@+id/txtratings"
+            android:layout_alignStart="@+id/txtratings"
+            android:layout_marginTop="46dp"/>
 
 
     </RelativeLayout>
