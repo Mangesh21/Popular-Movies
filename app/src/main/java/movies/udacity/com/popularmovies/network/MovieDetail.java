@@ -3,37 +3,20 @@ package movies.udacity.com.popularmovies.network;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.google.gson.annotations.SerializedName;
-import com.orm.dsl.Table;
-
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Created by mangesh on 21/2/16.
  */
-@Table
+
 public class MovieDetail implements Parcelable {
 
-
-    private transient Long id;
+    public Long _id;
 
     private String poster_path;
     private Boolean adult;
     private String overview;
     private String release_date;
-    private List<Integer> genreIds = new ArrayList<Integer>();
-
-    public Integer getMovie_ID() {
-        return movie_ID;
-    }
-
-    public void setMovie_ID(Integer movie_ID) {
-        this.movie_ID = movie_ID;
-    }
-
-    @SerializedName("id")
-    private Integer movie_ID;
+   // private List<Integer> genreIds = new ArrayList<Integer>();
+    private Integer id;
     private String originalTitle;
     private String originalLanguage;
     private String title;
@@ -42,6 +25,12 @@ public class MovieDetail implements Parcelable {
     private Integer vote_count;
     private Boolean video;
     private Double vote_average;
+
+
+    public MovieDetail(String title, String poster_path) {
+        this.title = title;
+        this.poster_path = poster_path;
+    }
 
     /**
      * @return The posterPath
@@ -99,21 +88,33 @@ public class MovieDetail implements Parcelable {
         this.release_date = releaseDate;
     }
 
-    /**
+  /*  *//**
      * @return The genreIds
-     */
+     *//*
     public List<Integer> getGenreIds() {
         return genreIds;
     }
 
-    /**
+    *//**
      * @param genreIds The genre_ids
-     */
+     *//*
     public void setGenreIds(List<Integer> genreIds) {
         this.genreIds = genreIds;
+    }*/
+
+    /**
+     * @return The id
+     */
+    public Integer getId() {
+        return id;
     }
 
-
+    /**
+     * @param id The id
+     */
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     /**
      * @return The originalTitle
@@ -234,8 +235,8 @@ public class MovieDetail implements Parcelable {
                 ", posterPath='" + poster_path + '\'' +
                 ", overview='" + overview + '\'' +
                 ", releaseDate='" + release_date + '\'' +
-                ", genreIds=" + genreIds +
-                ", id=" + movie_ID +
+             //   ", genreIds=" + genreIds +
+                ", id=" + id +
                 ", originalTitle='" + originalTitle + '\'' +
                 ", originalLanguage='" + originalLanguage + '\'' +
                 ", title='" + title + '\'' +
@@ -258,8 +259,8 @@ public class MovieDetail implements Parcelable {
         dest.writeValue(this.adult);
         dest.writeString(this.overview);
         dest.writeString(this.release_date);
-        dest.writeList(this.genreIds);
-        dest.writeValue(this.movie_ID);
+      //  dest.writeList(this.genreIds);
+        dest.writeValue(this.id);
         dest.writeString(this.originalTitle);
         dest.writeString(this.originalLanguage);
         dest.writeString(this.title);
@@ -278,9 +279,9 @@ public class MovieDetail implements Parcelable {
         this.adult = (Boolean) in.readValue(Boolean.class.getClassLoader());
         this.overview = in.readString();
         this.release_date = in.readString();
-        this.genreIds = new ArrayList<Integer>();
-        in.readList(this.genreIds, List.class.getClassLoader());
-        this.movie_ID = (Integer) in.readValue(Integer.class.getClassLoader());
+    //    this.genreIds = new ArrayList<Integer>();
+    //    in.readList(this.genreIds, List.class.getClassLoader());
+        this.id = (Integer) in.readValue(Integer.class.getClassLoader());
         this.originalTitle = in.readString();
         this.originalLanguage = in.readString();
         this.title = in.readString();

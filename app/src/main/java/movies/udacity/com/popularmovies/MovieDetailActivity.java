@@ -1,5 +1,6 @@
 package movies.udacity.com.popularmovies;
 
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.SpannableString;
@@ -7,11 +8,14 @@ import android.text.style.RelativeSizeSpan;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.orm.SugarRecord;
 
+import movies.udacity.com.popularmovies.database.MovieDetailsHelper;
 import movies.udacity.com.popularmovies.network.MovieDetail;
+
+import static nl.qbusict.cupboard.CupboardFactory.cupboard;
 
 public class MovieDetailActivity extends AppCompatActivity {
 
@@ -24,12 +28,17 @@ public class MovieDetailActivity extends AppCompatActivity {
 
     MovieDetail movieDetail = null;
 
+    SQLiteDatabase mSQLiteDatabase = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_detail);
         movieDetail = getIntent().getParcelableExtra(Constants.MOVIE_DETAILS);
+        MovieDetailsHelper movieDetailsHelper = new MovieDetailsHelper(this);
+        mSQLiteDatabase = movieDetailsHelper.getWritableDatabase();
         initView();
+
     }
 
     private void initView() {
@@ -41,8 +50,8 @@ public class MovieDetailActivity extends AppCompatActivity {
         imgLike = (ImageView) findViewById(R.id.imglike);
 
         txtReleaseDate.setText(movieDetail.getReleaseDate());
-        SpannableString ratingsText = SpannableString.valueOf(movieDetail.getVoteAverage() +"/10");
-        ratingsText.setSpan(new RelativeSizeSpan(1.7f),0, String.valueOf(movieDetail.getVoteAverage()).length(), 0);
+        SpannableString ratingsText = SpannableString.valueOf(movieDetail.getVoteAverage() + "/10");
+        ratingsText.setSpan(new RelativeSizeSpan(1.7f), 0, String.valueOf(movieDetail.getVoteAverage()).length(), 0);
         txtRatings.setText(ratingsText);
         txtMovieDetails.setText(movieDetail.getOverview());
         txtMovieName.setText(movieDetail.getTitle());
@@ -51,9 +60,9 @@ public class MovieDetailActivity extends AppCompatActivity {
         imgLike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SugarRecord.save(movieDetail);
+                cupboard().withDatabase(mSQLiteDatabase).put(movieDetail);
 
-                MovieDetail movieDetail2 = SugarRecord.findById(MovieDetail.class, 1);
+                Toast.makeText(MovieDetailActivity.this, "added to favourite", Toast.LENGTH_SHORT).show();
             }
         });
     }

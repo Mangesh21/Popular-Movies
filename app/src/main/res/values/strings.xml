@@ -2,6 +2,8 @@
     <string name="app_name">Popular Movies</string>
     <string name="sort_by_popularity">Sort By Popularity</string>
     <string name="sort_by_ratings">Sort By Ratings</string>
+    <string name="sort_by_favourite">Sort By Favourite</string>
     <string name="title_activity_movie_detail">Movie Details</string>
     <string name="release_date">Release Date</string>
+    <string name="content_authority">movies.udacity.com.popularmovies.database</string>
 </resources>

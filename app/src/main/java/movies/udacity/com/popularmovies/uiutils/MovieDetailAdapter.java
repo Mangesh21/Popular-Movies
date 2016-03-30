@@ -2,9 +2,7 @@ package movies.udacity.com.popularmovies.uiutils;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,12 +10,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+
+import java.util.List;
 
 import movies.udacity.com.popularmovies.Constants;
 import movies.udacity.com.popularmovies.MovieDetailActivity;
 import movies.udacity.com.popularmovies.R;
 import movies.udacity.com.popularmovies.Utils;
-import movies.udacity.com.popularmovies.network.MovieList;
+import movies.udacity.com.popularmovies.network.MovieDetail;
 
 /**
  * Created by mangesh on 22/2/16.
@@ -27,16 +28,20 @@ public class MovieDetailAdapter extends RecyclerView.Adapter<MovieDetailAdapter.
 
     private Context context;
 
-    public void setMovieList(MovieList movieList) {
-        this.movieList = movieList;
+
+    public void setMovieDetailsList(List<MovieDetail> movieDetails) {
+        this.mMovieDetails = movieDetails;
+
     }
 
-    private MovieList movieList;
+
+    private List<MovieDetail> mMovieDetails;
 
 
-    public MovieDetailAdapter(Context context, MovieList movieList) {
+    public MovieDetailAdapter(Context context, List<MovieDetail> movieDetails) {
         this.context = context;
-        this.movieList = movieList;
+        this.mMovieDetails = movieDetails;
+
     }
 
     @Override
@@ -48,13 +53,15 @@ public class MovieDetailAdapter extends RecyclerView.Adapter<MovieDetailAdapter.
 
     @Override
     public void onBindViewHolder(MovieView holder, int position) {
-        Glide.with(context).load(Utils.getCompleteImageURL(movieList.getResults().get(position).getPosterPath())).into(holder.imageView);
-        holder.textView.setText(movieList.getResults().get(position).getTitle());
+
+        Glide.with(context).load(Utils.getCompleteImageURL(mMovieDetails.get(position).getPosterPath())).diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.imageView);
+        holder.textView.setText(mMovieDetails.get(position).getTitle());
+
     }
 
     @Override
     public int getItemCount() {
-        return movieList.getResults().size();
+        return mMovieDetails.size();
     }
 
 
@@ -74,12 +81,10 @@ public class MovieDetailAdapter extends RecyclerView.Adapter<MovieDetailAdapter.
         public void onClick(View v) {
             //Log.d("POSITION **** ", String.valueOf(getAdapterPosition()));
             Intent movieDetaiIntent = new Intent(context, MovieDetailActivity.class);
-            movieDetaiIntent.putExtra(Constants.MOVIE_DETAILS, movieList.getResults().get(getAdapterPosition()));
+            movieDetaiIntent.putExtra(Constants.MOVIE_DETAILS, mMovieDetails.get(getAdapterPosition()));
             context.startActivity(movieDetaiIntent);
         }
     }
-
-
 
 
 }

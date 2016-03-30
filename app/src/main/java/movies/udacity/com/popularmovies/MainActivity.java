@@ -1,21 +1,24 @@
 package movies.udacity.com.popularmovies;
 
+import android.database.Cursor;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import movies.udacity.com.popularmovies.database.MovieDetailContentProvider;
 import movies.udacity.com.popularmovies.network.APICallBack;
 import movies.udacity.com.popularmovies.network.APIError;
 import movies.udacity.com.popularmovies.network.BaseClient;
+import movies.udacity.com.popularmovies.network.MovieDetail;
 import movies.udacity.com.popularmovies.network.MovieList;
 import movies.udacity.com.popularmovies.uiutils.MovieDetailAdapter;
 import movies.udacity.com.popularmovies.uiutils.SpacesItemDecoration;
@@ -26,6 +29,8 @@ public class MainActivity extends AppCompatActivity {
 
     RecyclerView mRecyclerView;
     MovieDetailAdapter adapter;
+
+    String[] projection = {"title", "poster_path"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,10 +69,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void success(MovieList movieList) {
                 if (adapter == null) {
-                    adapter = new MovieDetailAdapter(MainActivity.this, movieList);
+                    adapter = new MovieDetailAdapter(MainActivity.this, movieList.getResults());
                     mRecyclerView.setAdapter(adapter);
                 } else {
-                    adapter.setMovieList(movieList);
+                    adapter.setMovieDetailsList(movieList.getResults());
                     adapter.notifyDataSetChanged();
                 }
                 if (TextUtils.equals(order, Constants.ORDER_POPULARITY)) {
@@ -112,6 +117,22 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             } else {
                 getMovieList(Constants.ORDER_RATING);
+            }
+        }
+
+        if (id == R.id.action_sort_by_favourite) {
+            Cursor moviesList = MainActivity.this.getContentResolver().query(
+                    MovieDetailContentProvider.CONTENT_URI, projection, null, null, null);
+            List<MovieDetail> results = new ArrayList<MovieDetail>();
+            while (moviesList.moveToNext()) {
+                results.add(new MovieDetail(moviesList.getString(0), moviesList.getString(1)));
+            }
+            if (adapter == null) {
+                adapter = new MovieDetailAdapter(MainActivity.this, results);
+                mRecyclerView.setAdapter(adapter);
+            } else {
+                adapter.setMovieDetailsList(results);
+                adapter.notifyDataSetChanged();
             }
         }
 
