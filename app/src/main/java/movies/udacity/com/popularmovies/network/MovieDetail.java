@@ -26,6 +26,46 @@ public class MovieDetail implements Parcelable {
     private Boolean video;
     private Double vote_average;
 
+    private String movieTrailerOneID = null;
+
+    public String getReview2() {
+        return review2;
+    }
+
+    public void setReview2(String review2) {
+        this.review2 = review2;
+    }
+
+    public String getReview1() {
+        return review1;
+    }
+
+    public void setReview1(String review1) {
+        this.review1 = review1;
+    }
+
+    public String getMovieTrailerOneID() {
+        return movieTrailerOneID;
+    }
+
+    public void setMovieTrailerOneID(String movieTrailerOneID) {
+        this.movieTrailerOneID = movieTrailerOneID;
+    }
+
+    public String getMovieTrailerTwoID() {
+        return movieTrailerTwoID;
+    }
+
+    public void setMovieTrailerTwoID(String movieTrailerTwoID) {
+        this.movieTrailerTwoID = movieTrailerTwoID;
+    }
+
+    private String movieTrailerTwoID = null;
+
+    private String review1 = null;
+
+    private String review2 = null;
+
 
     public MovieDetail(String title, String poster_path) {
         this.title = title;
@@ -248,6 +288,9 @@ public class MovieDetail implements Parcelable {
                 '}';
     }
 
+    public MovieDetail() {
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -259,7 +302,6 @@ public class MovieDetail implements Parcelable {
         dest.writeValue(this.adult);
         dest.writeString(this.overview);
         dest.writeString(this.release_date);
-      //  dest.writeList(this.genreIds);
         dest.writeValue(this.id);
         dest.writeString(this.originalTitle);
         dest.writeString(this.originalLanguage);
@@ -269,9 +311,10 @@ public class MovieDetail implements Parcelable {
         dest.writeValue(this.vote_count);
         dest.writeValue(this.video);
         dest.writeValue(this.vote_average);
-    }
-
-    public MovieDetail() {
+        dest.writeString(this.movieTrailerOneID);
+        dest.writeString(this.movieTrailerTwoID);
+        dest.writeString(this.review1);
+        dest.writeString(this.review2);
     }
 
     protected MovieDetail(Parcel in) {
@@ -279,8 +322,6 @@ public class MovieDetail implements Parcelable {
         this.adult = (Boolean) in.readValue(Boolean.class.getClassLoader());
         this.overview = in.readString();
         this.release_date = in.readString();
-    //    this.genreIds = new ArrayList<Integer>();
-    //    in.readList(this.genreIds, List.class.getClassLoader());
         this.id = (Integer) in.readValue(Integer.class.getClassLoader());
         this.originalTitle = in.readString();
         this.originalLanguage = in.readString();
@@ -290,13 +331,19 @@ public class MovieDetail implements Parcelable {
         this.vote_count = (Integer) in.readValue(Integer.class.getClassLoader());
         this.video = (Boolean) in.readValue(Boolean.class.getClassLoader());
         this.vote_average = (Double) in.readValue(Double.class.getClassLoader());
+        this.movieTrailerOneID = in.readString();
+        this.movieTrailerTwoID = in.readString();
+        this.review1 = in.readString();
+        this.review2 = in.readString();
     }
 
-    public static final Parcelable.Creator<MovieDetail> CREATOR = new Parcelable.Creator<MovieDetail>() {
+    public static final Creator<MovieDetail> CREATOR = new Creator<MovieDetail>() {
+        @Override
         public MovieDetail createFromParcel(Parcel source) {
             return new MovieDetail(source);
         }
 
+        @Override
         public MovieDetail[] newArray(int size) {
             return new MovieDetail[size];
         }

@@ -40,12 +40,11 @@ public class BaseClient {
 
 
     public static BaseClient getInstance() {
-        if(instance==null) {
+        if (instance == null) {
             instance = new BaseClient();
             init();
             return instance;
-        }
-        else {
+        } else {
             return instance;
         }
     }
@@ -104,20 +103,43 @@ public class BaseClient {
         });
     }
 
-    public void getMovieTrailers(final String movieID) {
-        Call<MovieTrailers> callBack = api.getMovieTrailers("209112", Constants.***REMOVED***);
+    public void getMovieTrailers(final String movieID, final APICallBack<MovieTrailers> movieTrailersAPICallBack) {
+        Call<MovieTrailers> callBack = api.getMovieTrailers(movieID, Constants.***REMOVED***);
         callBack.enqueue(new Callback<MovieTrailers>() {
             @Override
             public void onResponse(Call<MovieTrailers> call, Response<MovieTrailers> response) {
-
+                if (response.isSuccess()) {
+                    movieTrailersAPICallBack.success(response.body());
+                } else {
+                    sendError(movieTrailersAPICallBack, response);
+                }
             }
 
             @Override
             public void onFailure(Call<MovieTrailers> call, Throwable t) {
-
+                sendError(movieTrailersAPICallBack, t);
             }
         });
 
+    }
+
+    public void getMovieReviews(final String movieID, final APICallBack<MovieReviews> reviewsAPICallBack) {
+        Call<MovieReviews> callBack = api.getMovieReviews(movieID, Constants.***REMOVED***);
+        callBack.enqueue(new Callback<MovieReviews>() {
+            @Override
+            public void onResponse(Call<MovieReviews> call, Response<MovieReviews> response) {
+                if (response.isSuccess()) {
+                    reviewsAPICallBack.success(response.body());
+                } else {
+                    sendError(reviewsAPICallBack, response);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<MovieReviews> call, Throwable t) {
+                sendError(reviewsAPICallBack, t);
+            }
+        });
     }
 
     protected void sendError(APICallBack callback, Throwable t) {

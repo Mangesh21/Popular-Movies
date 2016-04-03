@@ -17,6 +17,9 @@ public interface API {
 
     @GET("3/movie/{movieID}/videos")
     Call<MovieTrailers> getMovieTrailers(@Path("movieID") String movieID, @Query("api_key") String apiKey);
+
+    @GET("3/movie/{movieID}/reviews")
+    Call<MovieReviews> getMovieReviews(@Path("movieID") String movieID, @Query("api_key") String apiKey);
 }
 
 
