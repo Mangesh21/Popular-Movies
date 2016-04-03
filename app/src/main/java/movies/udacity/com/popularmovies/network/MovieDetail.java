@@ -15,7 +15,7 @@ public class MovieDetail implements Parcelable {
     private Boolean adult;
     private String overview;
     private String release_date;
-   // private List<Integer> genreIds = new ArrayList<Integer>();
+    // private List<Integer> genreIds = new ArrayList<Integer>();
     private Integer id;
     private String originalTitle;
     private String originalLanguage;
@@ -67,9 +67,30 @@ public class MovieDetail implements Parcelable {
     private String review2 = null;
 
 
-    public MovieDetail(String title, String poster_path) {
+    public boolean isOfflineData() {
+        return isOfflineData != 0;
+    }
+
+    public void setOfflineData(int offlineData) {
+        isOfflineData = offlineData;
+    }
+
+    private int isOfflineData = 0;
+
+    public MovieDetail(int id, String title, String poster_path, Double vote_Average, String release_date, String overview,
+                       String review1, String review2, String movieTrailerOneID, String movieTrailerTwoID, int isOfflineData) {
+        this.id = id;
         this.title = title;
         this.poster_path = poster_path;
+        this.vote_average = vote_Average;
+        this.release_date = release_date;
+        this.overview = overview;
+        this.review1 = review1;
+        this.review2 = review2;
+        this.movieTrailerOneID = movieTrailerOneID;
+        this.movieTrailerTwoID = movieTrailerTwoID;
+        this.isOfflineData = isOfflineData;
+
     }
 
     /**
@@ -275,7 +296,7 @@ public class MovieDetail implements Parcelable {
                 ", posterPath='" + poster_path + '\'' +
                 ", overview='" + overview + '\'' +
                 ", releaseDate='" + release_date + '\'' +
-             //   ", genreIds=" + genreIds +
+                //   ", genreIds=" + genreIds +
                 ", id=" + id +
                 ", originalTitle='" + originalTitle + '\'' +
                 ", originalLanguage='" + originalLanguage + '\'' +
@@ -298,6 +319,7 @@ public class MovieDetail implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeValue(this._id);
         dest.writeString(this.poster_path);
         dest.writeValue(this.adult);
         dest.writeString(this.overview);
@@ -315,9 +337,11 @@ public class MovieDetail implements Parcelable {
         dest.writeString(this.movieTrailerTwoID);
         dest.writeString(this.review1);
         dest.writeString(this.review2);
+        dest.writeInt(this.isOfflineData);
     }
 
     protected MovieDetail(Parcel in) {
+        this._id = (Long) in.readValue(Long.class.getClassLoader());
         this.poster_path = in.readString();
         this.adult = (Boolean) in.readValue(Boolean.class.getClassLoader());
         this.overview = in.readString();
@@ -335,6 +359,7 @@ public class MovieDetail implements Parcelable {
         this.movieTrailerTwoID = in.readString();
         this.review1 = in.readString();
         this.review2 = in.readString();
+        this.isOfflineData = in.readInt();
     }
 
     public static final Creator<MovieDetail> CREATOR = new Creator<MovieDetail>() {

@@ -60,8 +60,13 @@ public class MovieDetailActivity extends AppCompatActivity {
         MovieDetailsHelper movieDetailsHelper = new MovieDetailsHelper(this);
         mSQLiteDatabase = movieDetailsHelper.getWritableDatabase();
         initView();
-        initTrailers();
-        initReviews();
+        if (movieDetail.isOfflineData()) {
+            updateReviewsUI();
+            updateTrailersUI();
+        } else {
+            initTrailers();
+            initReviews();
+        }
     }
 
 
@@ -100,7 +105,7 @@ public class MovieDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (mMovieTrailers != null) {
-                    watchYoutubeVideo(mMovieTrailers.getResults().get(0).getKey());//play movie clip
+                    watchYoutubeVideo(movieDetail.getMovieTrailerOneID());//play movie clip
                 }
             }
         });
@@ -109,7 +114,7 @@ public class MovieDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (mMovieTrailers != null) {
-                    watchYoutubeVideo(mMovieTrailers.getResults().get(1).getKey());//play mvoie trailer
+                    watchYoutubeVideo(movieDetail.getMovieTrailerTwoID());//play mvoie trailer
                 }
             }
         });
@@ -126,16 +131,11 @@ public class MovieDetailActivity extends AppCompatActivity {
                 if (size > 0) {
                     movieDetail.setMovieTrailerOneID(mMovieTrailers.getResults().get(0).getKey()); //save the trailer One ID
                     if (size > 1) {
-                        trailerLayout2.setVisibility(View.VISIBLE);
                         movieDetail.setMovieTrailerTwoID(mMovieTrailers.getResults().get(1).getKey());// save the trailer Two ID
                     }
-                    else {
-                        trailerLayout2.setVisibility(View.GONE); //some movies have only 1 trailer
-                    }
-                } else {
-                    trailerLayout1.setVisibility(View.GONE);
-                    trailerLayout2.setVisibility(View.GONE);
                 }
+
+                updateTrailersUI();
             }
 
             @Override
@@ -150,10 +150,15 @@ public class MovieDetailActivity extends AppCompatActivity {
             @Override
             public void success(MovieReviews movieReviews) {
                 mMovieReviews = movieReviews;
-                movieDetail.setReview1(mMovieReviews.getResults().get(0).getContent());//Save Review 1
-                movieDetail.setReview2(mMovieReviews.getResults().get(1).getContent());// Save Review 2
-                review1.setText(movieDetail.getReview1());
-                review2.setText(movieDetail.getReview2());
+                if (mMovieReviews.getResults().size() > 0) {
+                    movieDetail.setReview1(mMovieReviews.getResults().get(0).getContent());//Save Review 1
+                    if (mMovieReviews.getResults().size() > 1) {
+                        movieDetail.setReview2(mMovieReviews.getResults().get(1).getContent());// Save Review 2
+                    }
+                }
+
+
+                updateReviewsUI();
             }
 
             ;
@@ -166,8 +171,22 @@ public class MovieDetailActivity extends AppCompatActivity {
     }
 
 
+    private void updateTrailersUI() {
 
+        if (movieDetail.getMovieTrailerOneID() == null && movieDetail.getMovieTrailerTwoID() == null) {
+            trailerLayout1.setVisibility(View.GONE);
+            trailerLayout2.setVisibility(View.GONE);
+        } else if (movieDetail.getMovieTrailerTwoID() == null) {
+            trailerLayout2.setVisibility(View.GONE);
+        } else {
+            trailerLayout2.setVisibility(View.VISIBLE);
+        }
+    }
 
+    private void updateReviewsUI() {
+        review1.setText(movieDetail.getReview1());
+        review2.setText(movieDetail.getReview2());
+    }
 
 
     /**
