@@ -26,18 +26,31 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class BaseClient {
 
 
-    protected Retrofit builder = null;
+    private static BaseClient instance = null;
 
-    private final String BASE_URL = "http://api.themoviedb.org/";
+    protected static Retrofit builder = null;
+
+    private static final String BASE_URL = "http://api.themoviedb.org/";
 
     public BaseClient() {
 
     }
 
-    private API api;
+    private static API api;
 
 
-    public synchronized void init() {
+    public static BaseClient getInstance() {
+        if(instance==null) {
+            instance = new BaseClient();
+            init();
+            return instance;
+        }
+        else {
+            return instance;
+        }
+    }
+
+    public static synchronized void init() {
 
 
         HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor();
@@ -91,6 +104,21 @@ public class BaseClient {
         });
     }
 
+    public void getMovieTrailers(final String movieID) {
+        Call<MovieTrailers> callBack = api.getMovieTrailers("209112", Constants.***REMOVED***);
+        callBack.enqueue(new Callback<MovieTrailers>() {
+            @Override
+            public void onResponse(Call<MovieTrailers> call, Response<MovieTrailers> response) {
+
+            }
+
+            @Override
+            public void onFailure(Call<MovieTrailers> call, Throwable t) {
+
+            }
+        });
+
+    }
 
     protected void sendError(APICallBack callback, Throwable t) {
         if (callback != null) {

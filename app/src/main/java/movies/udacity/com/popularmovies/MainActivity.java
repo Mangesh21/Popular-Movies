@@ -25,7 +25,7 @@ import movies.udacity.com.popularmovies.uiutils.SpacesItemDecoration;
 
 public class MainActivity extends AppCompatActivity {
 
-    BaseClient baseClient = null;
+
 
     RecyclerView mRecyclerView;
     MovieDetailAdapter adapter;
@@ -53,8 +53,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void init() {
-        baseClient = new BaseClient();
-        baseClient.init();
+
         getMovieList(Constants.ORDER_POPULARITY);
     }
 
@@ -65,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
      */
     private void getMovieList(final String order) {
 
-        baseClient.getMoviesList(order, new APICallBack<MovieList>() {
+        BaseClient.getInstance().getMoviesList(order, new APICallBack<MovieList>() {
             @Override
             public void success(MovieList movieList) {
                 if (adapter == null) {

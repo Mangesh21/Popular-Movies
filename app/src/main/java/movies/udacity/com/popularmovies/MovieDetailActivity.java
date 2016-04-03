@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 
 import movies.udacity.com.popularmovies.database.MovieDetailsHelper;
+import movies.udacity.com.popularmovies.network.BaseClient;
 import movies.udacity.com.popularmovies.network.MovieDetail;
 
 import static nl.qbusict.cupboard.CupboardFactory.cupboard;
@@ -38,6 +39,7 @@ public class MovieDetailActivity extends AppCompatActivity {
         MovieDetailsHelper movieDetailsHelper = new MovieDetailsHelper(this);
         mSQLiteDatabase = movieDetailsHelper.getWritableDatabase();
         initView();
+        BaseClient.getInstance().getMovieTrailers(null);
 
     }
 

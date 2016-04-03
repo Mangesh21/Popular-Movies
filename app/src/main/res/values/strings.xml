@@ -6,4 +6,7 @@
     <string name="title_activity_movie_detail">Movie Details</string>
     <string name="release_date">Release Date</string>
     <string name="content_authority">movies.udacity.com.popularmovies.database</string>
+    <string name="trailers">Trailers</string>
+    <string name="trailer1">Trailer 1</string>
+    <string name="trailer2">Trailer 2</string>
 </resources>

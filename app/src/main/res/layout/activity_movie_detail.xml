@@ -94,6 +94,71 @@
             android:layout_alignLeft="@+id/txtratings"
             android:layout_alignStart="@+id/txtratings"
             android:layout_marginTop="46dp"/>
+     <!--   <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">-->
+        <View
+            android:id="@+id/viewStub"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_below="@+id/txtmoviedetails"
+            android:background="@color/primary_light"
+            android:layout_marginTop="5dp"
+             />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/viewStub"
+            android:text="@string/trailers"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_marginTop="@dimen/activity_margin"
+            android:id="@+id/txttrailers"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_marginTop="@dimen/activity_margin"
+            android:layout_below="@+id/txttrailers"
+            android:id="@+id/trailersone"
+            >
+            <ImageView
+                android:id="@+id/trailer1"
+                android:layout_width="@dimen/view_width"
+                android:layout_height="@dimen/view_height"
+
+                android:src="@drawable/play"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/view_height"
+                android:text="@string/trailer1"
+                android:gravity="center"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_marginTop="@dimen/activity_margin"
+            android:layout_below="@+id/trailersone"
+            >
+            <ImageView
+                android:id="@+id/trailer2"
+                android:layout_width="@dimen/view_width"
+                android:layout_height="@dimen/view_height"
+                android:src="@drawable/play"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/view_height"
+                android:text="@string/trailer2"
+                android:gravity="center"
+                />
+        </LinearLayout>
+       <!-- </RelativeLayout>-->
 
 
     </RelativeLayout>
