@@ -33,4 +33,5 @@ dependencies {
     compile 'com.squareup.retrofit2:converter-gson:2.0.0-beta4'
     compile 'com.squareup.okhttp3:okhttp:3.1.2'
     compile 'nl.qbusict:cupboard:2.0.1'
+    compile 'com.android.support:support-v4:23.1.1'
 }

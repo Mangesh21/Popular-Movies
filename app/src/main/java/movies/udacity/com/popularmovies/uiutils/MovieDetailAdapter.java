@@ -1,7 +1,6 @@
 package movies.udacity.com.popularmovies.uiutils;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,8 +13,6 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import java.util.List;
 
-import movies.udacity.com.popularmovies.Constants;
-import movies.udacity.com.popularmovies.MovieDetailActivity;
 import movies.udacity.com.popularmovies.R;
 import movies.udacity.com.popularmovies.Utils;
 import movies.udacity.com.popularmovies.network.MovieDetail;
@@ -28,6 +25,9 @@ public class MovieDetailAdapter extends RecyclerView.Adapter<MovieDetailAdapter.
 
     private Context context;
 
+    OnMovieClickListener mOnMovieClickListener;
+
+    private List<MovieDetail> mMovieDetails;
 
     public void setMovieDetailsList(List<MovieDetail> movieDetails) {
         this.mMovieDetails = movieDetails;
@@ -35,11 +35,12 @@ public class MovieDetailAdapter extends RecyclerView.Adapter<MovieDetailAdapter.
     }
 
 
-    private List<MovieDetail> mMovieDetails;
 
 
-    public MovieDetailAdapter(Context context, List<MovieDetail> movieDetails) {
+
+    public MovieDetailAdapter(Context context, OnMovieClickListener onMovieClickListener, List<MovieDetail> movieDetails) {
         this.context = context;
+        this.mOnMovieClickListener = onMovieClickListener;
         this.mMovieDetails = movieDetails;
 
     }
@@ -79,12 +80,18 @@ public class MovieDetailAdapter extends RecyclerView.Adapter<MovieDetailAdapter.
 
         @Override
         public void onClick(View v) {
-            //Log.d("POSITION **** ", String.valueOf(getAdapterPosition()));
+          /*  //Log.d("POSITION **** ", String.valueOf(getAdapterPosition()));
             Intent movieDetaiIntent = new Intent(context, MovieDetailActivity.class);
             movieDetaiIntent.putExtra(Constants.MOVIE_DETAILS, mMovieDetails.get(getAdapterPosition()));
-            context.startActivity(movieDetaiIntent);
+            context.startActivity(movieDetaiIntent);*/
+
+            mOnMovieClickListener.onMovieClicked(mMovieDetails.get(getAdapterPosition()));
         }
     }
 
 
+    public interface OnMovieClickListener {
+        // TODO: Update argument type and name
+        void onMovieClicked(MovieDetail movieDetail);
+    }
 }

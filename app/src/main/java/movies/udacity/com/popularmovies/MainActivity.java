@@ -1,32 +1,19 @@
 package movies.udacity.com.popularmovies;
 
-import android.database.Cursor;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import movies.udacity.com.popularmovies.database.MovieDetailContentProvider;
-import movies.udacity.com.popularmovies.network.APICallBack;
-import movies.udacity.com.popularmovies.network.APIError;
-import movies.udacity.com.popularmovies.network.BaseClient;
 import movies.udacity.com.popularmovies.network.MovieDetail;
-import movies.udacity.com.popularmovies.network.MovieList;
 import movies.udacity.com.popularmovies.uiutils.MovieDetailAdapter;
-import movies.udacity.com.popularmovies.uiutils.SpacesItemDecoration;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements GridMoviesFragment.OnFragmentInteractionListener {
 
 
-    RecyclerView mRecyclerView;
+    // RecyclerView mRecyclerView;
     MovieDetailAdapter adapter;
 
     String[] projection = {"id", "title", "poster_path", "vote_average", "release_date", "overview",
@@ -40,56 +27,29 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-
-
         if (toolbar != null) {
             setSupportActionBar(toolbar);
             getSupportActionBar().setTitle(getString(R.string.app_name));
         }
-        mRecyclerView = (RecyclerView) findViewById(R.id.moivies_grid);
-        mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
-        SpacesItemDecoration decoration = new SpacesItemDecoration(10, 2);
-        mRecyclerView.addItemDecoration(decoration);
-        init();
+        if (findViewById(R.id.fragment_container) != null) {
 
-
-    }
-
-    private void init() {
-
-        getMovieList(Constants.ORDER_POPULARITY);
-    }
-
-    /**
-     * this function will fecth the list of movies
-     *
-     * @param order
-     */
-    private void getMovieList(final String order) {
-
-        BaseClient.getInstance().getMoviesList(order, new APICallBack<MovieList>() {
-            @Override
-            public void success(MovieList movieList) {
-                if (adapter == null) {
-                    adapter = new MovieDetailAdapter(MainActivity.this, movieList.getResults());
-                    mRecyclerView.setAdapter(adapter);
-                } else {
-                    adapter.setMovieDetailsList(movieList.getResults());
-                    adapter.notifyDataSetChanged();
-                }
-                if (TextUtils.equals(order, Constants.ORDER_POPULARITY)) {
-                    Constants.isOrderedByPopularity = true;
-                } else {
-                    Constants.isOrderedByPopularity = false;
-                }
+            if (savedInstanceState != null) {
+                return;
             }
 
-            @Override
-            public void error(APIError error) {
-                Toast.makeText(MainActivity.this, error.getErrorMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
+            // Create an instance of ExampleFragment
+            GridMoviesFragment gridMoviesFragment = new GridMoviesFragment();
+
+            // In case this activity was started with special instructions from an Intent,
+            // pass the Intent's extras to the fragment as arguments
+            gridMoviesFragment.setArguments(getIntent().getExtras());
+
+            // Add the fragment to the 'fragment_container' FrameLayout
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.fragment_container, gridMoviesFragment).commit();
+        }
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -103,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+     /*   int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_sort_by_popularity) {
@@ -154,7 +114,14 @@ public class MainActivity extends AppCompatActivity {
             Constants.isOrderByRatings = false;
             Constants.isOrderedByPopularity  = false;
         }
-
+*/
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onFragmentInteraction(MovieDetail movieDetail) {
+        Intent movieDetaiIntent = new Intent(MainActivity.this, MovieDetailActivity.class);
+        movieDetaiIntent.putExtra(Constants.MOVIE_DETAILS, movieDetail);
+        startActivity(movieDetaiIntent);
     }
 }
