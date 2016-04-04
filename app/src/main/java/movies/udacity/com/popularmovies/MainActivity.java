@@ -124,7 +124,6 @@ public class MainActivity extends AppCompatActivity {
                 getMovieList(Constants.ORDER_RATING);
             }
 
-            isOfflineData = false;
             Constants.isOrderByRatings = true;
             Constants.isOrderedByPopularity  = false;
         }

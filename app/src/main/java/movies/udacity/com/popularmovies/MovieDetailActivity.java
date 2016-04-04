@@ -104,7 +104,7 @@ public class MovieDetailActivity extends AppCompatActivity {
         trailer1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mMovieTrailers != null) {
+                if (movieDetail.getMovieTrailerOneID() != null) {
                     watchYoutubeVideo(movieDetail.getMovieTrailerOneID());//play movie clip
                 }
             }
@@ -113,7 +113,7 @@ public class MovieDetailActivity extends AppCompatActivity {
         trailer2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mMovieTrailers != null) {
+                if (movieDetail.getMovieTrailerTwoID() != null) {
                     watchYoutubeVideo(movieDetail.getMovieTrailerTwoID());//play mvoie trailer
                 }
             }
