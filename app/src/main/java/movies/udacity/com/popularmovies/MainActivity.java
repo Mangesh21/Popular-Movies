@@ -16,10 +16,7 @@ public class MainActivity extends AppCompatActivity implements GridMoviesFragmen
     // RecyclerView mRecyclerView;
     MovieDetailAdapter adapter;
 
-    String[] projection = {"id", "title", "poster_path", "vote_average", "release_date", "overview",
-            "review1", "review2", "movieTrailerOneID", "movieTrailerTwoID"
 
-    };
 
 
     @Override
@@ -60,62 +57,8 @@ public class MainActivity extends AppCompatActivity implements GridMoviesFragmen
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-     /*   int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_sort_by_popularity) {
-            if (Constants.isOrderedByPopularity) {
-                return true;
-            } else {
-                getMovieList(Constants.ORDER_POPULARITY);
-            }
-
-            Constants.isOrderByRatings = false;
-            Constants.isOrderedByPopularity  = true;
-        }
-
-        if (id == R.id.action_sort_by_ratings) {
-            if (Constants.isOrderByRatings) {
-                return true;
-            } else {
-                getMovieList(Constants.ORDER_RATING);
-            }
-
-            Constants.isOrderByRatings = true;
-            Constants.isOrderedByPopularity  = false;
-        }
-
-        if (id == R.id.action_sort_by_favourite) {
-            Cursor moviesList = MainActivity.this.getContentResolver().query(
-                    MovieDetailContentProvider.CONTENT_URI, projection, null, null, null);
-            List<MovieDetail> results = new ArrayList<MovieDetail>();
-            while (moviesList.moveToNext()) {
-                results.add(new MovieDetail(
-                        moviesList.getInt(0),
-                        moviesList.getString(1), moviesList.getString(2),
-                        moviesList.getDouble(3), moviesList.getString(4),
-                        moviesList.getString(5), moviesList.getString(6),
-                        moviesList.getString(7), moviesList.getString(8),
-                        moviesList.getString(9), 1
-                ));
-            }
-            if (adapter == null) {
-                adapter = new MovieDetailAdapter(MainActivity.this, results);
-                mRecyclerView.setAdapter(adapter);
-            } else {
-                adapter.setMovieDetailsList(results);
-                adapter.notifyDataSetChanged();
-            }
-
-
-            Constants.isOrderByRatings = false;
-            Constants.isOrderedByPopularity  = false;
-        }
-*/
-        return super.onOptionsItemSelected(item);
+        return false;
     }
 
     @Override
