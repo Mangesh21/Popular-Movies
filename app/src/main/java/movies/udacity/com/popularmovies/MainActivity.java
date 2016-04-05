@@ -17,7 +17,7 @@ public class MainActivity extends AppCompatActivity implements GridMoviesFragmen
     MovieDetailAdapter adapter;
 
 
-
+    boolean isTwoPane = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity implements GridMoviesFragmen
                 return;
             }
 
-            // Create an instance of ExampleFragment
+            // Create an instance of GridMoviesFragment
             GridMoviesFragment gridMoviesFragment = new GridMoviesFragment();
 
             // In case this activity was started with special instructions from an Intent,
@@ -44,6 +44,11 @@ public class MainActivity extends AppCompatActivity implements GridMoviesFragmen
             // Add the fragment to the 'fragment_container' FrameLayout
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.fragment_container, gridMoviesFragment).commit();
+        }
+
+        if (findViewById(R.id.fragment_detail_container) != null) {
+            isTwoPane = true;
+            getSupportFragmentManager().beginTransaction().add(R.id.fragment_detail_container, new MovieDetailFragment()).commit();
         }
     }
 
@@ -63,8 +68,15 @@ public class MainActivity extends AppCompatActivity implements GridMoviesFragmen
 
     @Override
     public void onFragmentInteraction(MovieDetail movieDetail) {
-        Intent movieDetaiIntent = new Intent(MainActivity.this, MovieDetailActivity.class);
-        movieDetaiIntent.putExtra(Constants.MOVIE_DETAILS, movieDetail);
-        startActivity(movieDetaiIntent);
+        if (isTwoPane) {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_detail_container, MovieDetailFragment.newInstance(movieDetail)).commit();
+
+        } else {
+            Intent movieDetaiIntent = new Intent(MainActivity.this, MovieDetailActivity.class);
+            movieDetaiIntent.putExtra(Constants.MOVIE_DETAILS, movieDetail);
+            startActivity(movieDetaiIntent);
+        }
+
     }
 }
