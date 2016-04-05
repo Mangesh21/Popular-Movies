@@ -5,7 +5,7 @@ package movies.udacity.com.popularmovies;
  */
 public class Constants {
 
-    public static String ***REMOVED*** =  "***REMOVED***";
+    public static String API_KEY =  "";
 
     public static String ORDER_POPULARITY = "popularity.desc";
 

@@ -84,7 +84,7 @@ public class BaseClient {
 
     public void getMoviesList(final String order, final APICallBack<MovieList> apiCallBack) {
 
-        Call<MovieList> callBack = api.getMoviesList(order, Constants.***REMOVED***);
+        Call<MovieList> callBack = api.getMoviesList(order, Constants.API_KEY);
         callBack.enqueue(new Callback<MovieList>() {
             @Override
             public void onResponse(Call<MovieList> call, Response<MovieList> response) {
@@ -104,7 +104,7 @@ public class BaseClient {
     }
 
     public void getMovieTrailers(final String movieID, final APICallBack<MovieTrailers> movieTrailersAPICallBack) {
-        Call<MovieTrailers> callBack = api.getMovieTrailers(movieID, Constants.***REMOVED***);
+        Call<MovieTrailers> callBack = api.getMovieTrailers(movieID, Constants.API_KEY);
         callBack.enqueue(new Callback<MovieTrailers>() {
             @Override
             public void onResponse(Call<MovieTrailers> call, Response<MovieTrailers> response) {
@@ -124,7 +124,7 @@ public class BaseClient {
     }
 
     public void getMovieReviews(final String movieID, final APICallBack<MovieReviews> reviewsAPICallBack) {
-        Call<MovieReviews> callBack = api.getMovieReviews(movieID, Constants.***REMOVED***);
+        Call<MovieReviews> callBack = api.getMovieReviews(movieID, Constants.API_KEY);
         callBack.enqueue(new Callback<MovieReviews>() {
             @Override
             public void onResponse(Call<MovieReviews> call, Response<MovieReviews> response) {
