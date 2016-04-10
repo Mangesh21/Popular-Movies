@@ -9,6 +9,7 @@ import android.os.Parcelable;
 
 public class MovieDetail implements Parcelable {
 
+
     public Long _id;
 
     private String poster_path;
@@ -16,6 +17,7 @@ public class MovieDetail implements Parcelable {
     private String overview;
     private String release_date;
     // private List<Integer> genreIds = new ArrayList<Integer>();
+
     private Integer id;
     private String originalTitle;
     private String originalLanguage;
@@ -26,23 +28,18 @@ public class MovieDetail implements Parcelable {
     private Boolean video;
     private Double vote_average;
 
+    public String getReviewsJSON() {
+        return reviewsJSON;
+    }
+
+    public void setReviewsJSON(String reviewsJSON) {
+        this.reviewsJSON = reviewsJSON;
+    }
+
+    private String reviewsJSON;
+
+
     private String movieTrailerOneID = null;
-
-    public String getReview2() {
-        return review2;
-    }
-
-    public void setReview2(String review2) {
-        this.review2 = review2;
-    }
-
-    public String getReview1() {
-        return review1;
-    }
-
-    public void setReview1(String review1) {
-        this.review1 = review1;
-    }
 
     public String getMovieTrailerOneID() {
         return movieTrailerOneID;
@@ -62,9 +59,7 @@ public class MovieDetail implements Parcelable {
 
     private String movieTrailerTwoID = null;
 
-    private String review1 = null;
 
-    private String review2 = null;
 
 
     public boolean isOfflineData() {
@@ -77,16 +72,15 @@ public class MovieDetail implements Parcelable {
 
     private int isOfflineData = 0;
 
-    public MovieDetail(int id, String title, String poster_path, Double vote_Average, String release_date, String overview,
-                       String review1, String review2, String movieTrailerOneID, String movieTrailerTwoID, int isOfflineData) {
+    public MovieDetail(int id, String title, String poster_path, Double vote_Average, String release_date, String overview,String reviewsJSON,
+                       String movieTrailerOneID, String movieTrailerTwoID, int isOfflineData) {
         this.id = id;
         this.title = title;
         this.poster_path = poster_path;
         this.vote_average = vote_Average;
         this.release_date = release_date;
         this.overview = overview;
-        this.review1 = review1;
-        this.review2 = review2;
+        this.reviewsJSON = reviewsJSON;
         this.movieTrailerOneID = movieTrailerOneID;
         this.movieTrailerTwoID = movieTrailerTwoID;
         this.isOfflineData = isOfflineData;
@@ -333,10 +327,9 @@ public class MovieDetail implements Parcelable {
         dest.writeValue(this.vote_count);
         dest.writeValue(this.video);
         dest.writeValue(this.vote_average);
+        dest.writeString(this.reviewsJSON);
         dest.writeString(this.movieTrailerOneID);
         dest.writeString(this.movieTrailerTwoID);
-        dest.writeString(this.review1);
-        dest.writeString(this.review2);
         dest.writeInt(this.isOfflineData);
     }
 
@@ -355,10 +348,9 @@ public class MovieDetail implements Parcelable {
         this.vote_count = (Integer) in.readValue(Integer.class.getClassLoader());
         this.video = (Boolean) in.readValue(Boolean.class.getClassLoader());
         this.vote_average = (Double) in.readValue(Double.class.getClassLoader());
+        this.reviewsJSON = in.readString();
         this.movieTrailerOneID = in.readString();
         this.movieTrailerTwoID = in.readString();
-        this.review1 = in.readString();
-        this.review2 = in.readString();
         this.isOfflineData = in.readInt();
     }
 

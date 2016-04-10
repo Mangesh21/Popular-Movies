@@ -55,8 +55,8 @@ public class GridMoviesFragment extends Fragment implements MovieDetailAdapter.O
 
     private View mView;
 
-    String[] projection = {"id", "title", "poster_path", "vote_average", "release_date", "overview",
-            "review1", "review2", "movieTrailerOneID", "movieTrailerTwoID"
+    String[] projection = {"id", "title", "poster_path", "vote_average", "release_date", "overview","reviewsJSON",
+            "movieTrailerOneID", "movieTrailerTwoID"
 
     };
 
@@ -172,8 +172,7 @@ public class GridMoviesFragment extends Fragment implements MovieDetailAdapter.O
                             moviesList.getString(1), moviesList.getString(2),
                             moviesList.getDouble(3), moviesList.getString(4),
                             moviesList.getString(5), moviesList.getString(6),
-                            moviesList.getString(7), moviesList.getString(8),
-                            moviesList.getString(9), 1
+                            moviesList.getString(7),moviesList.getString(8),  1
                     ));
                 }
                 if (adapter == null) {

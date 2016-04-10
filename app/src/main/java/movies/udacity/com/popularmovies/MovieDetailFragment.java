@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.text.SpannableString;
 import android.text.style.RelativeSizeSpan;
 import android.view.LayoutInflater;
@@ -18,6 +19,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 
 import movies.udacity.com.popularmovies.database.MovieDetailsHelper;
 import movies.udacity.com.popularmovies.network.APICallBack;
@@ -41,8 +48,7 @@ public class MovieDetailFragment extends Fragment {
     TextView txtRatings;
     TextView txtMovieName;
     TextView txtMovieDetails;
-    TextView review1;
-    TextView review2;
+
     ImageView imgMovie;
     ImageView imgLike;
 
@@ -53,6 +59,8 @@ public class MovieDetailFragment extends Fragment {
 
     LinearLayout trailerLayout2 = null;
 
+    LinearLayout reviewsLayout = null;
+
     MovieDetail movieDetail = null;
 
     SQLiteDatabase mSQLiteDatabase = null;
@@ -61,8 +69,9 @@ public class MovieDetailFragment extends Fragment {
 
     MovieReviews mMovieReviews = null;
 
-
     private View view;
+
+    List<String> reviewsList = null;
 
     public MovieDetailFragment() {
         // Required empty public constructor
@@ -92,11 +101,15 @@ public class MovieDetailFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        view =  inflater.inflate(R.layout.fragment_movie_detail, container, false);
+        view = inflater.inflate(R.layout.fragment_movie_detail, container, false);
 
-        if(movieDetail!=null) {
+        if (movieDetail != null) {
             initView();
             if (movieDetail.isOfflineData()) {
+                imgLike.setImageResource(R.drawable.like_selected);
+                Gson gson = new Gson();
+                Type type = new TypeToken<ArrayList<String>>() {}.getType();
+                reviewsList = gson.fromJson(movieDetail.getReviewsJSON(), type);
                 updateReviewsUI();
                 updateTrailersUI();
             } else {
@@ -129,10 +142,13 @@ public class MovieDetailFragment extends Fragment {
         imgLike = (ImageView) view.findViewById(R.id.imglike);
         trailer1 = (ImageView) view.findViewById(R.id.trailer1);
         trailer2 = (ImageView) view.findViewById(R.id.trailer2);
-        review1 = (TextView) view.findViewById(R.id.review1);
-        review2 = (TextView) view.findViewById(R.id.review2);
+        /*review1 = (TextView) view.findViewById(R.id.review1);
+        review2 = (TextView) view.findViewById(R.id.review2);*/
         trailerLayout1 = (LinearLayout) view.findViewById(R.id.trailersone);
         trailerLayout2 = (LinearLayout) view.findViewById(R.id.trailerstwo);
+
+        reviewsLayout = (LinearLayout) view.findViewById(R.id.reviewslayout);
+
         trailerLayout2.setVisibility(View.GONE);
         txtReleaseDate.setText(movieDetail.getReleaseDate());
         SpannableString ratingsText = SpannableString.valueOf(movieDetail.getVoteAverage() + "/10");
@@ -145,9 +161,21 @@ public class MovieDetailFragment extends Fragment {
         imgLike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                cupboard().withDatabase(mSQLiteDatabase).put(movieDetail);
 
-                Toast.makeText(getActivity(), "added to favourite", Toast.LENGTH_SHORT).show();
+                if(movieDetail.isOfflineData()) {
+                    Toast.makeText(getActivity(), "This movie is already in your favourite list.", Toast.LENGTH_SHORT).show();
+
+                } else {
+                    if(reviewsList.size() >0) {
+                        Gson gson = new Gson();
+
+                        String inputString= gson.toJson(reviewsList);
+                        movieDetail.setReviewsJSON(inputString);
+                    }
+                    cupboard().withDatabase(mSQLiteDatabase).put(movieDetail);
+                    Toast.makeText(getActivity(), "added to favourite", Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
 
@@ -201,14 +229,15 @@ public class MovieDetailFragment extends Fragment {
             public void success(MovieReviews movieReviews) {
                 mMovieReviews = movieReviews;
                 if (mMovieReviews.getResults().size() > 0) {
-                    movieDetail.setReview1(mMovieReviews.getResults().get(0).getContent());//Save Review 1
-                    if (mMovieReviews.getResults().size() > 1) {
-                        movieDetail.setReview2(mMovieReviews.getResults().get(1).getContent());// Save Review 2
+
+                    reviewsList = new ArrayList<String>();
+                    for (int i = 0; i < mMovieReviews.getResults().size(); i++) {
+                        reviewsList.add(mMovieReviews.getResults().get(i).getContent());
                     }
+                    updateReviewsUI();
                 }
 
 
-                updateReviewsUI();
             }
 
             ;
@@ -234,8 +263,26 @@ public class MovieDetailFragment extends Fragment {
     }
 
     private void updateReviewsUI() {
-        review1.setText(movieDetail.getReview1());
-        review2.setText(movieDetail.getReview2());
+        /*review1.setText(movieDetail.getReview1());
+        review2.setText(movieDetail.getReview2());*/
+
+        LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LinearLayout.LayoutParams lparams = null;
+        int size = reviewsList.size();
+        for (int i = 0; i < size; i++) {
+            TextView review = (TextView) inflater.inflate(R.layout.review_item, null);
+            review.setText(reviewsList.get(i));
+            reviewsLayout.addView(review); //add review
+            if (lparams == null) {
+                lparams = new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT, 3);
+                lparams.setMargins(15, 5, 0, 5);
+            }
+            View view = new View(getActivity());
+            view.setLayoutParams(lparams);
+            view.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.colorAccent));
+            reviewsLayout.addView(view);
+        }
     }
 
 

@@ -3,6 +3,7 @@
             xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:paddingBottom="30dp"
             tools:context="movies.udacity.com.popularmovies.MovieDetailActivity">
 
 
@@ -187,7 +188,7 @@
         <LinearLayout
             android:id="@+id/reviewslayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_below="@+id/reviews"
             android:layout_marginLeft="@dimen/activity_margin"
             android:layout_marginTop="@dimen/activity_margin"
@@ -195,34 +196,6 @@
             >
 
 
-            <TextView
-                android:id="@+id/review1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/activity_margin"
-                android:gravity="center"
-                android:textColor="@android:color/black"
-                />
-
-            <View
-                android:id="@+id/viewStub3"
-                android:layout_width="match_parent"
-                android:layout_height="2dp"
-                android:layout_below="@+id/trailerstwo"
-                android:layout_marginLeft="@dimen/activity_margin"
-                android:layout_marginTop="5dp"
-                android:background="@color/primary_light"
-                />
-
-            <TextView
-                android:id="@+id/review2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/activity_margin"
-                android:layout_marginTop="@dimen/activity_margin"
-                android:gravity="center"
-                android:textColor="@android:color/black"
-                />
         </LinearLayout>
     </RelativeLayout>
 
