@@ -113,6 +113,10 @@ public class MovieDetailFragment extends Fragment {
                 updateReviewsUI();
                 updateTrailersUI();
             } else {
+                MovieDetail detail = cupboard().withDatabase(mSQLiteDatabase).query(MovieDetail.class).withSelection( "id = ?", String.valueOf(movieDetail.getId())).get();
+                if(detail!=null) { // this item is already in favourite list
+                    imgLike.setImageResource(R.drawable.like_selected);
+                }
                 initTrailers();
                 initReviews();
             }
@@ -162,18 +166,30 @@ public class MovieDetailFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                if(movieDetail.isOfflineData()) {
+                if(movieDetail.isOfflineData()) { //its already from datavase
                     Toast.makeText(getActivity(), "This movie is already in your favourite list.", Toast.LENGTH_SHORT).show();
 
                 } else {
-                    if(reviewsList.size() >0) {
-                        Gson gson = new Gson();
 
-                        String inputString= gson.toJson(reviewsList);
-                        movieDetail.setReviewsJSON(inputString);
+                    MovieDetail detail = cupboard().withDatabase(mSQLiteDatabase).query(MovieDetail.class).withSelection( "id = ?", String.valueOf(movieDetail.getId())).get();
+
+                    if(detail == null) { //add new item only if its not in database
+                        if(reviewsList!=null && reviewsList.size() >0) {
+                            Gson gson = new Gson();
+
+                            String inputString= gson.toJson(reviewsList);
+                            movieDetail.setReviewsJSON(inputString);
+                        }
+                        cupboard().withDatabase(mSQLiteDatabase).put(movieDetail);
+                        imgLike.setImageResource(R.drawable.like_selected);
+                        Toast.makeText(getActivity(), "added to favourite", Toast.LENGTH_SHORT).show();
                     }
-                    cupboard().withDatabase(mSQLiteDatabase).put(movieDetail);
-                    Toast.makeText(getActivity(), "added to favourite", Toast.LENGTH_SHORT).show();
+
+                    else { //already added in database.
+                        Toast.makeText(getActivity(), "This movie is already in your favourite list.", Toast.LENGTH_SHORT).show();
+                    }
+
+
                 }
 
             }
@@ -268,21 +284,24 @@ public class MovieDetailFragment extends Fragment {
 
         LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         LinearLayout.LayoutParams lparams = null;
-        int size = reviewsList.size();
-        for (int i = 0; i < size; i++) {
-            TextView review = (TextView) inflater.inflate(R.layout.review_item, null);
-            review.setText(reviewsList.get(i));
-            reviewsLayout.addView(review); //add review
-            if (lparams == null) {
-                lparams = new LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.MATCH_PARENT, 3);
-                lparams.setMargins(15, 5, 0, 5);
+        if(reviewsList!=null) {
+            int size = reviewsList.size();
+            for (int i = 0; i < size; i++) {
+                TextView review = (TextView) inflater.inflate(R.layout.review_item, null);
+                review.setText(reviewsList.get(i));
+                reviewsLayout.addView(review); //add review
+                if (lparams == null) {
+                    lparams = new LinearLayout.LayoutParams(
+                            LinearLayout.LayoutParams.MATCH_PARENT, 3);
+                    lparams.setMargins(15, 5, 0, 5);
+                }
+                View view = new View(getActivity());
+                view.setLayoutParams(lparams);
+                view.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.colorAccent));
+                reviewsLayout.addView(view);
             }
-            View view = new View(getActivity());
-            view.setLayoutParams(lparams);
-            view.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.colorAccent));
-            reviewsLayout.addView(view);
         }
+
     }
 
 
