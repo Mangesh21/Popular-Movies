@@ -146,8 +146,6 @@ public class MovieDetailFragment extends Fragment {
         imgLike = (ImageView) view.findViewById(R.id.imglike);
         trailer1 = (ImageView) view.findViewById(R.id.trailer1);
         trailer2 = (ImageView) view.findViewById(R.id.trailer2);
-        /*review1 = (TextView) view.findViewById(R.id.review1);
-        review2 = (TextView) view.findViewById(R.id.review2);*/
         trailerLayout1 = (LinearLayout) view.findViewById(R.id.trailersone);
         trailerLayout2 = (LinearLayout) view.findViewById(R.id.trailerstwo);
 
