@@ -89,4 +89,3 @@ public class MainActivity extends AppCompatActivity implements GridMoviesFragmen
 
     }
 }
-//sendError(callback, new CitrusError(ResponseMessages.ERROR_NO_CVV_FOR_SAVED_CARD, Status.FAILED));

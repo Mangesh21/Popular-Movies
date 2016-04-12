@@ -26,4 +26,10 @@ public class MovieDetailActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(Constants.MOVIE_DETAILS, movieDetail);
+    }
+
 }

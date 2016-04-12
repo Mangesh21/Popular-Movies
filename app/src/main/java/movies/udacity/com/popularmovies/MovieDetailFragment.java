@@ -127,7 +127,13 @@ public class MovieDetailFragment extends Fragment {
                 initReviews();
             }
         }
+        else {
+            hideViews();
+        }
         return view;
+    }
+
+    private void hideViews() {
     }
 
 
