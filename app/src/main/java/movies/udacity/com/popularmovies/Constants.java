@@ -17,4 +17,8 @@ public class Constants {
 
     public static String MOVIE_DETAILS = "MOVIE_DETAILS";
 
+    public static String TWO_PANE = "TWO_PANE";
+
+    public static String MOVIE_LIST = "MOVIE_LIST";
+
 }

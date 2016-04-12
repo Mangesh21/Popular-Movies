@@ -55,7 +55,9 @@ public class GridMoviesFragment extends Fragment implements MovieDetailAdapter.O
 
     private View mView;
 
-    String[] projection = {"id", "title", "poster_path", "vote_average", "release_date", "overview","reviewsJSON",
+    ArrayList<MovieDetail> mMovieDetailList = null;
+
+    String[] projection = {"id", "title", "poster_path", "vote_average", "release_date", "overview", "reviewsJSON",
             "movieTrailerOneID", "movieTrailerTwoID"
 
     };
@@ -89,6 +91,9 @@ public class GridMoviesFragment extends Fragment implements MovieDetailAdapter.O
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        if (savedInstanceState != null && savedInstanceState.containsKey(Constants.MOVIE_LIST)) {
+            mMovieDetailList = savedInstanceState.getParcelableArrayList(Constants.MOVIE_LIST);
+        }
         setHasOptionsMenu(true);
     }
 
@@ -99,7 +104,11 @@ public class GridMoviesFragment extends Fragment implements MovieDetailAdapter.O
         mView = inflater.inflate(R.layout.fragment_grid_movies, container, false);
         mRecyclerView = (RecyclerView) mView.findViewById(R.id.moivies_grid);
         initRecyclerView();
-        getMovieList(Constants.ORDER_POPULARITY);
+        if (mMovieDetailList == null) {
+            getMovieList(Constants.ORDER_POPULARITY);
+        } else {
+            updateRecyclerViewFromSavedData();
+        }
         return mView;
     }
 
@@ -107,11 +116,12 @@ public class GridMoviesFragment extends Fragment implements MovieDetailAdapter.O
         BaseClient.getInstance().getMoviesList(order, new APICallBack<MovieList>() {
             @Override
             public void success(MovieList movieList) {
+                mMovieDetailList = (ArrayList<MovieDetail>) movieList.getResults();
                 if (adapter == null) {
-                    adapter = new MovieDetailAdapter(getActivity(), GridMoviesFragment.this, movieList.getResults());
+                    adapter = new MovieDetailAdapter(getActivity(), GridMoviesFragment.this, mMovieDetailList);
                     mRecyclerView.setAdapter(adapter);
                 } else {
-                    adapter.setMovieDetailsList(movieList.getResults());
+                    adapter.setMovieDetailsList(mMovieDetailList);
                     adapter.notifyDataSetChanged();
                 }
                 if (TextUtils.equals(order, Constants.ORDER_POPULARITY)) {
@@ -161,6 +171,7 @@ public class GridMoviesFragment extends Fragment implements MovieDetailAdapter.O
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList(Constants.MOVIE_LIST, mMovieDetailList);
     }
 
     @Override
@@ -177,11 +188,12 @@ public class GridMoviesFragment extends Fragment implements MovieDetailAdapter.O
                             moviesList.getString(1), moviesList.getString(2),
                             moviesList.getDouble(3), moviesList.getString(4),
                             moviesList.getString(5), moviesList.getString(6),
-                            moviesList.getString(7),moviesList.getString(8),  1
+                            moviesList.getString(7), moviesList.getString(8), 1
                     ));
                 }
+                mMovieDetailList = (ArrayList<MovieDetail>) results;
                 if (adapter == null) {
-                    adapter = new MovieDetailAdapter(getActivity(), GridMoviesFragment.this, results);
+                    adapter = new MovieDetailAdapter(getActivity(), GridMoviesFragment.this, mMovieDetailList);
                     mRecyclerView.setAdapter(adapter);
                 } else {
                     adapter.setMovieDetailsList(results);
@@ -225,5 +237,10 @@ public class GridMoviesFragment extends Fragment implements MovieDetailAdapter.O
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(MovieDetail movieDetail);
+    }
+
+    public void updateRecyclerViewFromSavedData() {
+        adapter = new MovieDetailAdapter(getActivity(), GridMoviesFragment.this, mMovieDetailList);
+        mRecyclerView.setAdapter(adapter);
     }
 }
