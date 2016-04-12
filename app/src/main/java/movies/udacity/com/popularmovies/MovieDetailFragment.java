@@ -26,6 +26,8 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import movies.udacity.com.popularmovies.database.MovieDetailsHelper;
 import movies.udacity.com.popularmovies.network.APICallBack;
 import movies.udacity.com.popularmovies.network.APIError;
@@ -42,23 +44,45 @@ public class MovieDetailFragment extends Fragment {
 
 
 
-    TextView txtReleaseDate;
-    TextView txtRatings;
-    TextView txtMovieName;
-    TextView txtMovieDetails;
 
+
+    @Bind(R.id.txtreleasedate)
+    TextView txtReleaseDate;
+    @Bind(R.id.txtRelease)
+    TextView txtRelease;
+    @Bind(R.id.txtratings)
+    TextView txtRatings;
+    @Bind(R.id.txtmoviename)
+    TextView txtMovieName;
+    @Bind(R.id.txtmoviedetails)
+    TextView txtMovieDetails;
+    @Bind(R.id.txttrailers)
+    TextView txttrailers;
+    @Bind(R.id.reviews)
+    TextView reviews;
+    @Bind(R.id.imgmovie)
     ImageView imgMovie;
+    @Bind(R.id.imglike)
     ImageView imgLike;
+    @Bind(R.id.imgShare)
     ImageView imgShare;
 
+    @Bind(R.id.trailer1)
     ImageView trailer1;
+    @Bind(R.id.trailer2)
     ImageView trailer2;
+    @Bind(R.id.trailersone)
+    LinearLayout trailerLayout1;
+    @Bind(R.id.trailerstwo)
+    LinearLayout trailerLayout2;
+    @Bind(R.id.reviewslayout)
+    LinearLayout reviewsLayout;
 
-    LinearLayout trailerLayout1 = null;
+    @Bind(R.id.viewStub)
+    View viewstub;
 
-    LinearLayout trailerLayout2 = null;
-
-    LinearLayout reviewsLayout = null;
+    @Bind(R.id.viewStub2)
+    View viewStub2;
 
     MovieDetail movieDetail = null;
 
@@ -105,7 +129,7 @@ public class MovieDetailFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_movie_detail, container, false);
-
+        ButterKnife.bind(this, view);
         if (movieDetail != null) {
             initView();
             if (movieDetail.isOfflineData() || movieDetail.isSavedInstanceData()) { // this is from saved instance
@@ -134,6 +158,18 @@ public class MovieDetailFragment extends Fragment {
     }
 
     private void hideViews() {
+        txtRelease.setVisibility(View.GONE);
+        imgLike.setVisibility(View.GONE);
+        imgShare.setVisibility(View.GONE);
+        txtMovieName.setVisibility(View.GONE);
+        txtMovieDetails.setVisibility(View.GONE);
+        txttrailers.setVisibility(View.GONE);
+        trailerLayout1.setVisibility(View.GONE);
+        trailerLayout2.setVisibility(View.GONE);
+        reviews.setVisibility(View.GONE);
+        viewstub.setVisibility(View.GONE);
+        viewStub2.setVisibility(View.GONE);
+
     }
 
 
@@ -157,19 +193,6 @@ public class MovieDetailFragment extends Fragment {
 
 
     private void initView() {
-        txtReleaseDate = (TextView) view.findViewById(R.id.txtreleasedate);
-        txtRatings = (TextView) view.findViewById(R.id.txtratings);
-        txtMovieDetails = (TextView) view.findViewById(R.id.txtmoviedetails);
-        txtMovieName = (TextView) view.findViewById(R.id.txtmoviename);
-        imgMovie = (ImageView) view.findViewById(R.id.imgmovie);
-        imgLike = (ImageView) view.findViewById(R.id.imglike);
-        imgShare = (ImageView) view.findViewById(R.id.imgShare);
-        trailer1 = (ImageView) view.findViewById(R.id.trailer1);
-        trailer2 = (ImageView) view.findViewById(R.id.trailer2);
-        trailerLayout1 = (LinearLayout) view.findViewById(R.id.trailersone);
-        trailerLayout2 = (LinearLayout) view.findViewById(R.id.trailerstwo);
-
-        reviewsLayout = (LinearLayout) view.findViewById(R.id.reviewslayout);
 
         trailerLayout2.setVisibility(View.GONE);
         txtReleaseDate.setText(movieDetail.getReleaseDate());
@@ -310,8 +333,7 @@ public class MovieDetailFragment extends Fragment {
     }
 
     private void updateReviewsUI() {
-        /*review1.setText(movieDetail.getReview1());
-        review2.setText(movieDetail.getReview2());*/
+
 
         LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         LinearLayout.LayoutParams lparams = null;
