@@ -158,7 +158,10 @@ public class MovieDetailFragment extends Fragment {
         txtRatings.setText(ratingsText);
         txtMovieDetails.setText(movieDetail.getOverview());
         txtMovieName.setText(movieDetail.getTitle());
-        Glide.with(getActivity()).load(Utils.getCompleteImageURL(movieDetail.getPosterPath())).into(imgMovie);
+        Glide.with(getActivity()).load(Utils.getCompleteImageURL(movieDetail.getPosterPath()))
+                .placeholder(R.drawable.placeholder)
+                .error(R.drawable.error)
+                .into(imgMovie);
 
         imgLike.setOnClickListener(new View.OnClickListener() {
             @Override

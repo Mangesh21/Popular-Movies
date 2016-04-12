@@ -28,11 +28,9 @@ public class MainActivity extends AppCompatActivity implements GridMoviesFragmen
             setSupportActionBar(toolbar);
             getSupportActionBar().setTitle(getString(R.string.app_name));
         }
-        if (findViewById(R.id.fragment_container) != null) {
 
-            if (savedInstanceState != null) {
-                return;
-            }
+
+        if (savedInstanceState == null || !savedInstanceState.containsKey(Constants.TWO_PANE)) {
 
             // Create an instance of GridMoviesFragment
             GridMoviesFragment gridMoviesFragment = new GridMoviesFragment();
@@ -44,10 +42,14 @@ public class MainActivity extends AppCompatActivity implements GridMoviesFragmen
             // Add the fragment to the 'fragment_container' FrameLayout
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.fragment_container, gridMoviesFragment).commit();
-        }
 
-        if (findViewById(R.id.fragment_detail_container) != null) {
-            isTwoPane = true;
+            if (findViewById(R.id.fragment_detail_container) != null) {
+                isTwoPane = true;
+            }
+        } else {
+            isTwoPane = savedInstanceState.getBoolean(Constants.TWO_PANE);
+        }
+        if (isTwoPane && savedInstanceState == null) { //do not add if already added
             getSupportFragmentManager().beginTransaction().add(R.id.fragment_detail_container, new MovieDetailFragment()).commit();
         }
     }
@@ -67,6 +69,13 @@ public class MainActivity extends AppCompatActivity implements GridMoviesFragmen
     }
 
     @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(Constants.TWO_PANE, isTwoPane);
+    }
+
+
+    @Override
     public void onFragmentInteraction(MovieDetail movieDetail) {
         if (isTwoPane) {
             getSupportFragmentManager().beginTransaction()
@@ -80,3 +89,4 @@ public class MainActivity extends AppCompatActivity implements GridMoviesFragmen
 
     }
 }
+//sendError(callback, new CitrusError(ResponseMessages.ERROR_NO_CVV_FOR_SAVED_CARD, Status.FAILED));

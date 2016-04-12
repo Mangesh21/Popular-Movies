@@ -55,7 +55,10 @@ public class MovieDetailAdapter extends RecyclerView.Adapter<MovieDetailAdapter.
     @Override
     public void onBindViewHolder(MovieView holder, int position) {
 
-        Glide.with(context).load(Utils.getCompleteImageURL(mMovieDetails.get(position).getPosterPath())).diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.imageView);
+        Glide.with(context).load(Utils.getCompleteImageURL(mMovieDetails.get(position).getPosterPath()))
+                .placeholder(R.drawable.placeholder)
+                .error(R.drawable.error)
+                .diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.imageView);
         holder.textView.setText(mMovieDetails.get(position).getTitle());
 
     }
