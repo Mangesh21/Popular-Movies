@@ -38,10 +38,8 @@ import static nl.qbusict.cupboard.CupboardFactory.cupboard;
 
 
 public class MovieDetailFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+
+
 
 
     TextView txtReleaseDate;
@@ -51,6 +49,7 @@ public class MovieDetailFragment extends Fragment {
 
     ImageView imgMovie;
     ImageView imgLike;
+    ImageView imgShare;
 
     ImageView trailer1;
     ImageView trailer2;
@@ -72,6 +71,10 @@ public class MovieDetailFragment extends Fragment {
     private View view;
 
     List<String> reviewsList = null;
+
+    final String YOUTUBE_URL = "http://www.youtube.com/watch?v=";
+
+    final String SHARE_LINK = "Sharing Link...";
 
     public MovieDetailFragment() {
         // Required empty public constructor
@@ -154,6 +157,7 @@ public class MovieDetailFragment extends Fragment {
         txtMovieName = (TextView) view.findViewById(R.id.txtmoviename);
         imgMovie = (ImageView) view.findViewById(R.id.imgmovie);
         imgLike = (ImageView) view.findViewById(R.id.imglike);
+        imgShare = (ImageView) view.findViewById(R.id.imgShare);
         trailer1 = (ImageView) view.findViewById(R.id.trailer1);
         trailer2 = (ImageView) view.findViewById(R.id.trailer2);
         trailerLayout1 = (LinearLayout) view.findViewById(R.id.trailersone);
@@ -185,12 +189,6 @@ public class MovieDetailFragment extends Fragment {
                     MovieDetail detail = cupboard().withDatabase(mSQLiteDatabase).query(MovieDetail.class).withSelection("id = ?", String.valueOf(movieDetail.getId())).get();
 
                     if (detail == null) { //add new item only if its not in database
-                      /*  if(reviewsList!=null && reviewsList.size() >0) {
-                            Gson gson = new Gson();
-
-                            String inputString= gson.toJson(reviewsList);
-                            movieDetail.setReviewsJSON(inputString);
-                        }*/
                         cupboard().withDatabase(mSQLiteDatabase).put(movieDetail);
                         imgLike.setImageResource(R.drawable.like_selected);
                         Toast.makeText(getActivity(), "added to favourite", Toast.LENGTH_SHORT).show();
@@ -222,6 +220,17 @@ public class MovieDetailFragment extends Fragment {
             }
         });
 
+        imgShare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (movieDetail.getMovieTrailerOneID()!=null) {
+                    shareTrailer();
+                } else {
+                    Toast.makeText(getActivity(), "No trailer found for this movie..", Toast.LENGTH_SHORT).show();
+                }
+                
+            }
+        });
 
     }
 
@@ -332,9 +341,18 @@ public class MovieDetailFragment extends Fragment {
             startActivity(intent);
         } catch (ActivityNotFoundException ex) {
             Intent intent = new Intent(Intent.ACTION_VIEW,
-                    Uri.parse("http://www.youtube.com/watch?v=" + id));
+                    Uri.parse(YOUTUBE_URL + id));
             startActivity(intent);
         }
+    }
+
+    public void shareTrailer() {
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_SEND);
+        intent.putExtra(Intent.EXTRA_TEXT,
+                movieDetail.getTitle() + " Watch : " + YOUTUBE_URL + movieDetail.getMovieTrailerOneID());
+        intent.setType("text/plain");
+        startActivity(Intent.createChooser(intent, SHARE_LINK));
     }
 
 
