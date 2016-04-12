@@ -105,16 +105,19 @@ public class MovieDetailFragment extends Fragment {
 
         if (movieDetail != null) {
             initView();
-            if (movieDetail.isOfflineData()) {
-                imgLike.setImageResource(R.drawable.like_selected);
+            if (movieDetail.isOfflineData() || movieDetail.isSavedInstanceData()) { // this is from saved instance
+                if (movieDetail.isOfflineData()) { // isOfffine means from favourite
+                    imgLike.setImageResource(R.drawable.like_selected);
+                }
                 Gson gson = new Gson();
-                Type type = new TypeToken<ArrayList<String>>() {}.getType();
+                Type type = new TypeToken<ArrayList<String>>() {
+                }.getType();
                 reviewsList = gson.fromJson(movieDetail.getReviewsJSON(), type);
                 updateReviewsUI();
                 updateTrailersUI();
             } else {
-                MovieDetail detail = cupboard().withDatabase(mSQLiteDatabase).query(MovieDetail.class).withSelection( "id = ?", String.valueOf(movieDetail.getId())).get();
-                if(detail!=null) { // this item is already in favourite list
+                MovieDetail detail = cupboard().withDatabase(mSQLiteDatabase).query(MovieDetail.class).withSelection("id = ?", String.valueOf(movieDetail.getId())).get();
+                if (detail != null) { // this item is already in favourite list
                     imgLike.setImageResource(R.drawable.like_selected);
                 }
                 initTrailers();
@@ -124,6 +127,13 @@ public class MovieDetailFragment extends Fragment {
         return view;
     }
 
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        movieDetail.setSavedInstanceData(1);
+        outState.putParcelable(Constants.MOVIE_DETAILS, movieDetail);
+    }
 
     @Override
     public void onAttach(Context context) {
@@ -167,26 +177,24 @@ public class MovieDetailFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                if(movieDetail.isOfflineData()) { //its already from datavase
+                if (movieDetail.isOfflineData()) { //its already from datavase
                     Toast.makeText(getActivity(), "This movie is already in your favourite list.", Toast.LENGTH_SHORT).show();
 
                 } else {
 
-                    MovieDetail detail = cupboard().withDatabase(mSQLiteDatabase).query(MovieDetail.class).withSelection( "id = ?", String.valueOf(movieDetail.getId())).get();
+                    MovieDetail detail = cupboard().withDatabase(mSQLiteDatabase).query(MovieDetail.class).withSelection("id = ?", String.valueOf(movieDetail.getId())).get();
 
-                    if(detail == null) { //add new item only if its not in database
-                        if(reviewsList!=null && reviewsList.size() >0) {
+                    if (detail == null) { //add new item only if its not in database
+                      /*  if(reviewsList!=null && reviewsList.size() >0) {
                             Gson gson = new Gson();
 
                             String inputString= gson.toJson(reviewsList);
                             movieDetail.setReviewsJSON(inputString);
-                        }
+                        }*/
                         cupboard().withDatabase(mSQLiteDatabase).put(movieDetail);
                         imgLike.setImageResource(R.drawable.like_selected);
                         Toast.makeText(getActivity(), "added to favourite", Toast.LENGTH_SHORT).show();
-                    }
-
-                    else { //already added in database.
+                    } else { //already added in database.
                         Toast.makeText(getActivity(), "This movie is already in your favourite list.", Toast.LENGTH_SHORT).show();
                     }
 
@@ -251,6 +259,13 @@ public class MovieDetailFragment extends Fragment {
                     for (int i = 0; i < mMovieReviews.getResults().size(); i++) {
                         reviewsList.add(mMovieReviews.getResults().get(i).getContent());
                     }
+
+                    if (reviewsList != null && reviewsList.size() > 0) {
+                        Gson gson = new Gson();
+
+                        String inputString = gson.toJson(reviewsList);
+                        movieDetail.setReviewsJSON(inputString);
+                    } //add reviews JSON to MovieDetail object
                     updateReviewsUI();
                 }
 
@@ -285,7 +300,7 @@ public class MovieDetailFragment extends Fragment {
 
         LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         LinearLayout.LayoutParams lparams = null;
-        if(reviewsList!=null) {
+        if (reviewsList != null) {
             int size = reviewsList.size();
             for (int i = 0; i < size; i++) {
                 TextView review = (TextView) inflater.inflate(R.layout.review_item, null);

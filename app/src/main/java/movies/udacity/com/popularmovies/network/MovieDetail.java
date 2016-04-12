@@ -60,8 +60,6 @@ public class MovieDetail implements Parcelable {
     private String movieTrailerTwoID = null;
 
 
-
-
     public boolean isOfflineData() {
         return isOfflineData != 0;
     }
@@ -72,7 +70,18 @@ public class MovieDetail implements Parcelable {
 
     private int isOfflineData = 0;
 
-    public MovieDetail(int id, String title, String poster_path, Double vote_Average, String release_date, String overview,String reviewsJSON,
+    public boolean isSavedInstanceData() {
+        return isSavedInstanceData != 0;
+    }
+
+    public void setSavedInstanceData(int savedInstanceData) {
+        isSavedInstanceData = savedInstanceData;
+    }
+
+    private int isSavedInstanceData = 0;
+
+
+    public MovieDetail(int id, String title, String poster_path, Double vote_Average, String release_date, String overview, String reviewsJSON,
                        String movieTrailerOneID, String movieTrailerTwoID, int isOfflineData) {
         this.id = id;
         this.title = title;
@@ -331,6 +340,7 @@ public class MovieDetail implements Parcelable {
         dest.writeString(this.movieTrailerOneID);
         dest.writeString(this.movieTrailerTwoID);
         dest.writeInt(this.isOfflineData);
+        dest.writeInt(this.isSavedInstanceData);
     }
 
     protected MovieDetail(Parcel in) {
@@ -352,6 +362,7 @@ public class MovieDetail implements Parcelable {
         this.movieTrailerOneID = in.readString();
         this.movieTrailerTwoID = in.readString();
         this.isOfflineData = in.readInt();
+        this.isSavedInstanceData = in.readInt();
     }
 
     public static final Creator<MovieDetail> CREATOR = new Creator<MovieDetail>() {
