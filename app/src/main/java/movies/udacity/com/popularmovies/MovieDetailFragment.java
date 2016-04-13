@@ -42,10 +42,6 @@ import static nl.qbusict.cupboard.CupboardFactory.cupboard;
 public class MovieDetailFragment extends Fragment {
 
 
-
-
-
-
     @Bind(R.id.txtreleasedate)
     TextView txtReleaseDate;
     @Bind(R.id.txtRelease)
@@ -150,8 +146,7 @@ public class MovieDetailFragment extends Fragment {
                 initTrailers();
                 initReviews();
             }
-        }
-        else {
+        } else {
             hideViews();
         }
         return view;
@@ -252,12 +247,12 @@ public class MovieDetailFragment extends Fragment {
         imgShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (movieDetail.getMovieTrailerOneID()!=null) {
+                if (movieDetail.getMovieTrailerOneID() != null) {
                     shareTrailer();
                 } else {
                     Toast.makeText(getActivity(), "No trailer found for this movie..", Toast.LENGTH_SHORT).show();
                 }
-                
+
             }
         });
 

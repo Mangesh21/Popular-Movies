@@ -8,13 +8,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import movies.udacity.com.popularmovies.network.MovieDetail;
-import movies.udacity.com.popularmovies.uiutils.MovieDetailAdapter;
 
 public class MainActivity extends AppCompatActivity implements GridMoviesFragment.OnFragmentInteractionListener {
-
-
-    // RecyclerView mRecyclerView;
-    MovieDetailAdapter adapter;
 
 
     boolean isTwoPane = false;

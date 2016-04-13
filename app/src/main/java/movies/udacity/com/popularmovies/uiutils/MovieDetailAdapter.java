@@ -35,9 +35,6 @@ public class MovieDetailAdapter extends RecyclerView.Adapter<MovieDetailAdapter.
     }
 
 
-
-
-
     public MovieDetailAdapter(Context context, OnMovieClickListener onMovieClickListener, List<MovieDetail> movieDetails) {
         this.context = context;
         this.mOnMovieClickListener = onMovieClickListener;
@@ -83,11 +80,6 @@ public class MovieDetailAdapter extends RecyclerView.Adapter<MovieDetailAdapter.
 
         @Override
         public void onClick(View v) {
-          /*  //Log.d("POSITION **** ", String.valueOf(getAdapterPosition()));
-            Intent movieDetaiIntent = new Intent(context, MovieDetailActivity.class);
-            movieDetaiIntent.putExtra(Constants.MOVIE_DETAILS, mMovieDetails.get(getAdapterPosition()));
-            context.startActivity(movieDetaiIntent);*/
-
             mOnMovieClickListener.onMovieClicked(mMovieDetails.get(getAdapterPosition()));
         }
     }
